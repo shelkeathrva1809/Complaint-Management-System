@@ -1,0 +1,26 @@
+# Compiled executables
+*.exe
+*.out
+*.o
+*.obj
+
+# Build directories
+build/
+bin/
+
+# IDE files
+.vscode/
+*.suo
+*.user
+*.sln.docstates
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Evidence uploads
+evidence/
+
+# Config (may contain local settings)
+config/

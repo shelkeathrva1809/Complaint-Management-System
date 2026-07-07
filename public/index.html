@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPCMS — Login</title>
+    <meta name="description" content="Smart Public Complaint Management System - Government Grade">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-logo">
+                <h1>🏛️ SPCMS</h1>
+                <p>Smart Public Complaint Management System</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+                <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Sign Up</button>
+            </div>
+
+            <!-- Alerts -->
+            <div class="success-banner" id="successBanner"></div>
+            <div class="alert-error" id="errorAlert"></div>
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="you@gmail.com" required>
+                    <span class="valid-icon">✓</span>
+                    <div class="error-msg" id="loginEmailError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    <div class="error-msg" id="loginPasswordError"></div>
+                </div>
+                <button type="submit" class="btn-primary" id="loginBtn">Login</button>
+                <p style="text-align:center;margin-top:16px;font-size:0.8rem;color:#64748b;">
+                    Demo: rajesh@gmail.com / Citizen@123
+                </p>
+            </form>
+
+            <!-- SIGNUP FORM -->
+            <form id="signupForm" style="display:none" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter full name" required>
+                    <span class="valid-icon">✓</span>
+                    <div class="error-msg" id="signupNameError">Invalid name. Please enter only letters</div>
+                </div>
+                <div class="form-group">
+                    <label for="signupPhone">Phone Number</label>
+                    <input type="tel" id="signupPhone" placeholder="10-digit number" maxlength="10" required>
+                    <span class="valid-icon">✓</span>
+                    <div class="error-msg" id="signupPhoneError">Invalid phone number. Enter a 10-digit valid number</div>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" placeholder="you@gmail.com" required>
+                    <span class="valid-icon">✓</span>
+                    <div class="error-msg" id="signupEmailError">Invalid email. Use gmail/yahoo/outlook only</div>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Min 8 chars, 1 uppercase, 1 number" required>
+                    <span class="valid-icon">✓</span>
+                    <div class="error-msg" id="signupPasswordError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="signupRole">Role</label>
+                    <select id="signupRole">
+                        <option value="citizen">Citizen</option>
+                        <option value="officer">Officer</option>
+                    </select>
+                </div>
+                <div class="form-group" id="deptGroup" style="display:none">
+                    <label for="signupDept">Department</label>
+                    <select id="signupDept">
+                        <option value="PWD">PWD (Roads)</option>
+                        <option value="Water Supply">Water Supply</option>
+                        <option value="Electricity Board">Electricity Board</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary" id="signupBtn">Create Account</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/js/validation.js"></script>
+<script>
+    // Check if already logged in
+    const token = localStorage.getItem('spcms_token');
+    if (token) window.location.href = '/dashboard.html';
+
+    // Tab switching
+    function switchTab(tab) {
+        document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+        document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
+        document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+        document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+        hideAlerts();
+    }
+
+    // Role change → show department
+    document.getElementById('signupRole').addEventListener('change', (e) => {
+        document.getElementById('deptGroup').style.display = e.target.value === 'officer' ? 'block' : 'none';
+    });
+
+    // Real-time validation on signup
+    document.getElementById('signupName').addEventListener('input', (e) => {
+        const r = validateName(e.target.value);
+        setFieldState('signupName', 'signupNameError', r);
+    });
+    document.getElementById('signupPhone').addEventListener('input', (e) => {
+        const r = validatePhone(e.target.value);
+        setFieldState('signupPhone', 'signupPhoneError', r);
+    });
+    document.getElementById('signupEmail').addEventListener('input', (e) => {
+        const r = validateEmail(e.target.value);
+        setFieldState('signupEmail', 'signupEmailError', r);
+    });
+    document.getElementById('signupPassword').addEventListener('input', (e) => {
+        const r = validatePassword(e.target.value);
+        setFieldState('signupPassword', 'signupPasswordError', r);
+    });
+
+    function setFieldState(inputId, errorId, result) {
+        const group = document.getElementById(inputId).parentElement;
+        const errEl = document.getElementById(errorId);
+        group.classList.remove('error', 'valid');
+        if (document.getElementById(inputId).value.trim() === '') return;
+        if (result.valid) {
+            group.classList.add('valid');
+        } else {
+            group.classList.add('error');
+            errEl.textContent = result.error;
+        }
+    }
+
+    function hideAlerts() {
+        document.getElementById('successBanner').classList.remove('show');
+        document.getElementById('errorAlert').classList.remove('show');
+    }
+
+    function showError(msg) {
+        const el = document.getElementById('errorAlert');
+        el.textContent = msg;
+        el.classList.add('show');
+    }
+
+    function showSuccess(msg) {
+        const el = document.getElementById('successBanner');
+        el.innerHTML = '✔ ' + msg;
+        el.classList.add('show');
+    }
+
+    // LOGIN
+    async function handleLogin(e) {
+        e.preventDefault();
+        hideAlerts();
+        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+        const password = document.getElementById('loginPassword').value;
+        if (!email || !password) { showError('Please fill all fields'); return; }
+
+        const btn = document.getElementById('loginBtn');
+        btn.classList.add('loading');
+        btn.innerHTML = '<span class="spinner"></span> Logging in...';
+
+        try {
+            const r = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await r.json();
+            if (data.success) {
+                localStorage.setItem('spcms_token', data.token);
+                localStorage.setItem('spcms_user', JSON.stringify(data.user));
+                showSuccess('Login successful! Redirecting...');
+                setTimeout(() => window.location.href = '/dashboard.html', 800);
+            } else {
+                showError(data.error || 'Invalid credentials');
+            }
+        } catch (err) {
+            showError('Connection error. Is the server running?');
+        }
+        btn.classList.remove('loading');
+        btn.textContent = 'Login';
+    }
+
+    // SIGNUP
+    async function handleSignup(e) {
+        e.preventDefault();
+        hideAlerts();
+        const name = document.getElementById('signupName').value.trim();
+        const phone = document.getElementById('signupPhone').value.trim();
+        const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+        const password = document.getElementById('signupPassword').value;
+        const role = document.getElementById('signupRole').value;
+        const department = document.getElementById('signupDept').value;
+
+        // Validate all
+        const checks = [
+            validateName(name), validatePhone(phone),
+            validateEmail(email), validatePassword(password)
+        ];
+        for (const c of checks) {
+            if (!c.valid) { showError(c.error); return; }
+        }
+
+        const btn = document.getElementById('signupBtn');
+        btn.classList.add('loading');
+        btn.innerHTML = '<span class="spinner"></span> Creating...';
+
+        try {
+            const body = { name, email, phone, password, role };
+            if (role === 'officer') body.department = department;
+            const r = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await r.json();
+            if (data.success) {
+                showSuccess('Citizen details verified successfully ✔');
+                localStorage.setItem('spcms_token', data.token);
+                localStorage.setItem('spcms_user', JSON.stringify(data.user));
+                setTimeout(() => window.location.href = '/dashboard.html', 1200);
+            } else {
+                showError(data.error || 'Signup failed');
+            }
+        } catch (err) {
+            showError('Connection error');
+        }
+        btn.classList.remove('loading');
+        btn.textContent = 'Create Account';
+    }
+</script>
+</body>
+</html>

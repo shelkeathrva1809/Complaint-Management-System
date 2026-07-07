@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Complaint - SPCMS</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-cyan: #06b6d4;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --border: #334155;
+            --border-invalid: #ef4444;
+            --border-valid: #22c55e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .form-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+        }
+
+        .form-container h2 {
+            margin-top: 0;
+            color: var(--accent-cyan);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+        }
+
+        /* Rule 4: Green border when input is valid */
+        .form-group input.is-valid {
+            border-color: var(--border-valid);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        }
+
+        /* Rule 4: Red border when input is invalid */
+        .form-group input.is-invalid {
+            border-color: var(--border-invalid);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        /* Rule 4: Error messages below each input field in red color */
+        .error-message {
+            color: var(--accent-red);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            min-height: 18px;
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
+        }
+
+        .error-message.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Character counter */
+        .char-count {
+            text-align: right;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-cyan);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s, background 0.2s, transform 0.15s;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background: #0891b2;
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        /* Rule 4: Disable the submit button if any field is invalid */
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #global-msg {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .msg-success {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Register Complaint</h2>
+        <form id="complaintForm" novalidate>
+
+            <!-- NAME FIELD -->
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name"
+                       placeholder="Enter your full name"
+                       minlength="2" maxlength="50" autocomplete="name">
+                <div class="error-message" id="name-error">Enter a valid name (only letters allowed)</div>
+                <div class="char-count" id="name-count">0 / 50</div>
+            </div>
+
+            <!-- PHONE NUMBER FIELD -->
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone"
+                       placeholder="Enter 10-digit phone number"
+                       maxlength="10" autocomplete="tel">
+                <div class="error-message" id="phone-error">Enter a valid 10-digit phone number</div>
+            </div>
+
+            <!-- EMAIL FIELD -->
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email"
+                       placeholder="example@gmail.com" autocomplete="email">
+                <div class="error-message" id="email-error">Enter a valid email with allowed domain (gmail/yahoo/outlook)</div>
+            </div>
+
+            <!-- SUBMIT BUTTON — disabled by default (Rule 4) -->
+            <button type="submit" id="submitBtn" class="submit-btn" disabled>Submit Complaint</button>
+
+            <!-- Rule 6: Success message area -->
+            <div id="global-msg"></div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ════════════════════════════════════════════
+            //  DOM REFERENCES
+            // ════════════════════════════════════════════
+            const form       = document.getElementById('complaintForm');
+            const submitBtn  = document.getElementById('submitBtn');
+            const globalMsg  = document.getElementById('global-msg');
+
+            const nameInput  = document.getElementById('name');
+            const phoneInput = document.getElementById('phone');
+            const emailInput = document.getElementById('email');
+
+            const nameError  = document.getElementById('name-error');
+            const phoneError = document.getElementById('phone-error');
+            const emailError = document.getElementById('email-error');
+            const nameCount  = document.getElementById('name-count');
+
+            // Track whether the user has interacted with each field
+            // so we don't show red on a pristine, untouched field
+            const touched = { name: false, phone: false, email: false };
+
+            // ════════════════════════════════════════════
+            //  1 ▸ NAME VALIDATION
+            //    - Only alphabets (A-Z, a-z) and spaces
+            //    - Min 2, Max 50 characters
+            //    - No numbers or special characters
+            //    - Trim extra spaces
+            // ════════════════════════════════════════════
+            const validateName = () => {
+                // Rule 7: Trim all inputs before validation
+                let val = nameInput.value.trim().replace(/\s+/g, ' ');
+
+                // Rule 1: Only letters and spaces, length 2–50
+                const nameRegex = /^[A-Za-z][A-Za-z ]{0,48}[A-Za-z]$/;
+                //  ↑ ensures at least 2 alpha chars, allows spaces in middle, max 50 total
+
+                const isValid = val.length >= 2 && val.length <= 50 && nameRegex.test(val);
+
+                if (touched.name) {
+                    if (isValid) {
+                        setValid(nameInput, nameError);
+                    } else {
+                        setInvalid(nameInput, nameError);
+                    }
+                }
+
+                // Update character counter
+                nameCount.textContent = `${val.length} / 50`;
+
+                return isValid;
+            };
+
+            // ════════════════════════════════════════════
+            //  2 ▸ PHONE NUMBER VALIDATION
+            //    - Exactly 10 digits
+            //    - Only numeric values
+            //    - Should not start with 0–5 (Indian standard)
+            // ════════════════════════════════════════════
+            const validatePhone = () => {
+                let val = phoneInput.value.trim().replace(/\s+/g, '');
+
+                // Rule 2: 10 digits, starts with 6-9
+                const phoneRegex = /^[6-9]\d{9}$/;
+                const isValid = phoneRegex.test(val);
+
+                if (touched.phone) {
+                    if (isValid) {
+                        setValid(phoneInput, phoneError);
+                    } else {
+                        setInvalid(phoneInput, phoneError);
+                    }
+                }
+
+                return isValid;
+            };
+
+            // ════════════════════════════════════════════
+            //  3 ▸ EMAIL VALIDATION
+            //    - Valid format (user@domain.com)
+            //    - Only @gmail.com, @yahoo.com, @outlook.com
+            //    - Convert to lowercase automatically
+            // ════════════════════════════════════════════
+            const validateEmail = () => {
+                // Rule 3: Convert email to lowercase automatically
+                emailInput.value = emailInput.value.toLowerCase().trim();
+                let val = emailInput.value;
+
+                // Allow only specific domains
+                const emailRegex = /^[a-z0-9][a-z0-9._%+-]*@(gmail\.com|yahoo\.com|outlook\.com)$/;
+                const isValid = emailRegex.test(val);
+
+                if (touched.email) {
+                    if (isValid) {
+                        setValid(emailInput, emailError);
+                    } else {
+                        setInvalid(emailInput, emailError);
+                    }
+                }
+
+                return isValid;
+            };
+
+            // ════════════════════════════════════════════
+            //  HELPER ▸ Set Valid / Invalid States (Rule 4)
+            // ════════════════════════════════════════════
+            const setValid = (inputEl, errorEl) => {
+                inputEl.classList.remove('is-invalid');
+                inputEl.classList.add('is-valid');
+                errorEl.classList.remove('visible');
+            };
+
+            const setInvalid = (inputEl, errorEl) => {
+                inputEl.classList.remove('is-valid');
+                inputEl.classList.add('is-invalid');
+                errorEl.classList.add('visible');
+            };
+
+            const clearState = (inputEl, errorEl) => {
+                inputEl.classList.remove('is-valid', 'is-invalid');
+                errorEl.classList.remove('visible');
+            };
+
+            // ════════════════════════════════════════════
+            //  HELPER ▸ Check Overall Form Validity
+            //  Rule 4: Disable the submit button if any field is invalid
+            // ════════════════════════════════════════════
+            const checkFormValidity = () => {
+                const allValid =
+                    nameInput.classList.contains('is-valid') &&
+                    phoneInput.classList.contains('is-valid') &&
+                    emailInput.classList.contains('is-valid');
+
+                submitBtn.disabled = !allValid;
+                return allValid;
+            };
+
+            // ════════════════════════════════════════════
+            //  5 ▸ REAL-TIME VALIDATION (on input)
+            //    - Validate while typing
+            // ════════════════════════════════════════════
+
+            nameInput.addEventListener('input', () => {
+                touched.name = true;
+                validateName();
+                checkFormValidity();
+            });
+
+            phoneInput.addEventListener('input', () => {
+                touched.phone = true;
+                // Strip non-numeric characters in real time
+                phoneInput.value = phoneInput.value.replace(/\D/g, '');
+                validatePhone();
+                checkFormValidity();
+            });
+
+            emailInput.addEventListener('input', () => {
+                touched.email = true;
+                validateEmail();
+                checkFormValidity();
+            });
+
+            // ════════════════════════════════════════════
+            //  BLUR ▸ Trim + re-validate on leaving field
+            // ════════════════════════════════════════════
+
+            nameInput.addEventListener('blur', () => {
+                // Trim extra spaces
+                nameInput.value = nameInput.value.trim().replace(/\s+/g, ' ');
+                if (nameInput.value.length > 0) touched.name = true;
+                validateName();
+                checkFormValidity();
+            });
+
+            phoneInput.addEventListener('blur', () => {
+                phoneInput.value = phoneInput.value.trim().replace(/\D/g, '');
+                if (phoneInput.value.length > 0) touched.phone = true;
+                validatePhone();
+                checkFormValidity();
+            });
+
+            emailInput.addEventListener('blur', () => {
+                emailInput.value = emailInput.value.trim().toLowerCase();
+                if (emailInput.value.length > 0) touched.email = true;
+                validateEmail();
+                checkFormValidity();
+            });
+
+            // ════════════════════════════════════════════
+            //  6 + 7 ▸ FORM SUBMISSION
+            //    - Validate again on submit
+            //    - Prevent multiple submissions
+            //    - Show success message on valid submit
+            // ════════════════════════════════════════════
+
+            let isSubmitting = false; // Rule 7: Prevent multiple submissions
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // Rule 7: Prevent multiple submissions
+                if (isSubmitting) return;
+
+                // Mark all fields as touched so errors display
+                touched.name  = true;
+                touched.phone = true;
+                touched.email = true;
+
+                // Rule 7: Trim all inputs before validation
+                nameInput.value  = nameInput.value.trim().replace(/\s+/g, ' ');
+                phoneInput.value = phoneInput.value.trim().replace(/\D/g, '');
+                emailInput.value = emailInput.value.trim().toLowerCase();
+
+                // Rule 5: Validate again on form submission
+                const isNameValid  = validateName();
+                const isPhoneValid = validatePhone();
+                const isEmailValid = validateEmail();
+                checkFormValidity();
+
+                if (isNameValid && isPhoneValid && isEmailValid) {
+                    // Rule 7: Prevent multiple submissions
+                    isSubmitting = true;
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Submitting...';
+
+                    // Simulate API call
+                    setTimeout(() => {
+                        // Reset form
+                        form.reset();
+
+                        // Clear validation classes
+                        clearState(nameInput, nameError);
+                        clearState(phoneInput, phoneError);
+                        clearState(emailInput, emailError);
+
+                        // Reset touched state
+                        touched.name  = false;
+                        touched.phone = false;
+                        touched.email = false;
+
+                        // Reset character counter
+                        nameCount.textContent = '0 / 50';
+
+                        // Reset button text
+                        submitBtn.textContent = 'Submit Complaint';
+
+                        // Rule 6: Show success message — "Form submitted successfully"
+                        globalMsg.textContent = 'Form submitted successfully';
+                        globalMsg.className   = 'msg-success';
+                        globalMsg.style.display = 'block';
+
+                        // Unlock submissions
+                        isSubmitting = false;
+                        checkFormValidity();
+
+                        // Hide success message after 4 seconds
+                        setTimeout(() => {
+                            globalMsg.style.display = 'none';
+                        }, 4000);
+
+                    }, 1000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

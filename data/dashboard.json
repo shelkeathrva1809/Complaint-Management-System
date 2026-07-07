@@ -1,0 +1,57 @@
+{
+  "stats": {
+    "total": 6,
+    "resolved": 2,
+    "inProgress": 1,
+    "pending": 2,
+    "escalated": 1,
+    "road": 2,
+    "water": 2,
+    "electricity": 2,
+    "emergency": 3,
+    "normal": 2,
+    "low": 1
+  },
+  "complaints": [
+    {"id": 1, "description": "Large pothole on MG Road near Junction 4", "department": "Public Works Department (PWD)", "severity": "Emergency", "status": "Pending", "officer": "R.K. Sharma", "time": "06-Mar-2026 15:15:03"},
+    {"id": 2, "description": "Water pipeline leak flooding Sector 21", "department": "Water Supply Department", "severity": "Normal", "status": "In Progress", "officer": "A.K. Patel", "time": "06-Mar-2026 15:15:03"},
+    {"id": 3, "description": "Power outage in Ward 7, transformer sparking", "department": "Electricity Board", "severity": "Emergency", "status": "Escalated", "officer": "V.K. Gupta", "time": "06-Mar-2026 15:15:03"},
+    {"id": 4, "description": "Broken streetlight on NH-48 service road", "department": "Public Works Department (PWD)", "severity": "Low", "status": "Resolved", "officer": "R.K. Sharma", "time": "06-Mar-2026 15:15:03"},
+    {"id": 5, "description": "No water supply in Greenwood Colony for 3 days", "department": "Water Supply Department", "severity": "Emergency", "status": "Resolved", "officer": "A.K. Patel", "time": "06-Mar-2026 15:15:03"},
+    {"id": 6, "description": "Frequent voltage fluctuations in Block C", "department": "Electricity Board", "severity": "Normal", "status": "Pending", "officer": "V.K. Gupta", "time": "06-Mar-2026 15:15:03"}
+  ],
+  "officers": [
+    {"id": 101, "name": "R.K. Sharma", "email": "sharma@pwd.gov.in", "department": "PWD", "level": 1},
+    {"id": 102, "name": "S.P. Verma", "email": "verma@pwd.gov.in", "department": "PWD", "level": 2},
+    {"id": 103, "name": "Commissioner Das", "email": "das@municipal.gov.in", "department": "Municipal", "level": 3},
+    {"id": 201, "name": "A.K. Patel", "email": "patel@water.gov.in", "department": "Water Supply", "level": 1},
+    {"id": 202, "name": "M.S. Iyer", "email": "iyer@water.gov.in", "department": "Water Supply", "level": 2},
+    {"id": 301, "name": "V.K. Gupta", "email": "gupta@electricity.gov.in", "department": "Electricity Board", "level": 1},
+    {"id": 302, "name": "P.N. Rao", "email": "rao@electricity.gov.in", "department": "Electricity Board", "level": 2}
+  ],
+  "emailLog": [
+    {"to": "sharma@pwd.gov.in", "subject": "Complaint #1 - Public Works Department (PWD) Emergency", "time": "06-Mar-2026 15:15:03", "status": "Sent"},
+    {"to": "patel@water.gov.in", "subject": "Complaint #2 - Water Supply Department Normal", "time": "06-Mar-2026 15:15:03", "status": "Sent"},
+    {"to": "gupta@electricity.gov.in", "subject": "Complaint #3 - Electricity Board Emergency", "time": "06-Mar-2026 15:15:03", "status": "Sent"},
+    {"to": "sharma@pwd.gov.in", "subject": "Complaint #4 - Public Works Department (PWD) Low", "time": "06-Mar-2026 15:15:03", "status": "Sent"},
+    {"to": "patel@water.gov.in", "subject": "Complaint #5 - Water Supply Department Emergency", "time": "06-Mar-2026 15:15:03", "status": "Sent"},
+    {"to": "gupta@electricity.gov.in", "subject": "Complaint #6 - Electricity Board Normal", "time": "06-Mar-2026 15:15:03", "status": "Sent"},
+    {"to": "anita@email.com", "subject": "Complaint #4 Resolved", "time": "06-Mar-2026 15:15:03", "status": "Sent"},
+    {"to": "sunil@email.com", "subject": "Complaint #5 Resolved", "time": "06-Mar-2026 15:15:03", "status": "Sent"}
+  ],
+  "activity": [
+    {"text": "[15:15:03] [*] Complaint #3 status: Pending -> Escalated", "time": "15:15:03"},
+    {"text": "[15:15:03] [*] Complaint #2 status: Pending -> In Progress", "time": "15:15:03"},
+    {"text": "[15:15:03] [[+]] Complaint #5 resolved by A.K. Patel", "time": "15:15:03"},
+    {"text": "[15:15:03] [*] Complaint #5 status: Pending -> Resolved", "time": "15:15:03"},
+    {"text": "[15:15:03] [[+]] Complaint #4 resolved by R.K. Sharma", "time": "15:15:03"},
+    {"text": "[15:15:03] [*] Complaint #4 status: Pending -> Resolved", "time": "15:15:03"},
+    {"text": "[15:15:03] [+] Complaint #6 registered - Electricity Board - Normal", "time": "15:15:03"},
+    {"text": "[15:15:03] [+] Complaint #5 registered - Water Supply Department - Emergency", "time": "15:15:03"},
+    {"text": "[15:15:03] [+] Complaint #4 registered - Public Works Department (PWD) - Low", "time": "15:15:03"},
+    {"text": "[15:15:03] [+] Complaint #3 registered - Electricity Board - Emergency", "time": "15:15:03"},
+    {"text": "[15:15:03] [+] Complaint #2 registered - Water Supply Department - Normal", "time": "15:15:03"},
+    {"text": "[15:15:03] [+] Complaint #1 registered - Public Works Department (PWD) - Emergency", "time": "15:15:03"},
+    {"text": "[15:15:03] System initialized", "time": "15:15:03"}
+  ]
+}
